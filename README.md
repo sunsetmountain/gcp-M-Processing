@@ -27,7 +27,7 @@ msft_sqlserver_features<br/>
 git clone https://github.com/sunsetmountain/gcp-M-Processing
 
 <H2>Move the files into the repository directory</H2>
-mv *.csv /gcp-M-Processing
+mv *.csv ./gcp-M-Processing/
 
 <H2>Enable and run the script</H2>
 chmod +x bqUploadData.sh
