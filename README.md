@@ -1,10 +1,8 @@
 # gcp-M-Processing
 
-# MovereProcessing
+<H1>Processing inventory files with GCP</H1>
 
-<H1>Processing Movere files with GCP</H1>
-
-<H2>Obtain the Movere files</H2>
+<H2>Obtain the files</H2>
 If in a ZIP file, extract them
 Remove the last underscore followed by the datestamp on each file
 
