@@ -109,3 +109,26 @@ WHERE Foreign_Device <> "Unresolved"
 GROUP BY Device_Name
 ORDER BY Connections DESC' \
 movereDataset.Server_Outgoing_Connections
+
+# Azure_VM_Comparison
+bq mk \
+--use_legacy_sql=false \
+--view \
+'select 
+    DS.Device_name,
+    DS.Avg_CPU,
+    DS.Avg_RAM,
+    SI.CPU_Headroom,
+    SI.RAM_Headroom,
+    SI.processor_model,
+    SI.Core_count,
+    SI.Total_RAM__GB_,
+    SI.Azure_Profile as AzureVMName,
+    SI.Azure_VM_vCPU as AzureVMCPUs,
+    SI.Azure_VM_RAM__GB_ as AzureVMRam,
+    PI._Cost_Month__Pay_As_You_Go__No_Contract_ as AzureVMCost
+from movereDataset.arc_landscape_device_summary DS
+    inner join movereDataset.azure_vm_sizing SI on SI.Device_Name = DS.Device_Name
+    inner join movereDataset.arc_azure_vm_pricing PI on PI.Device_name = SI.Device_Name
+Order by AzureVMCost Desc' \
+movereDataset.Azure_VM_Comparison
