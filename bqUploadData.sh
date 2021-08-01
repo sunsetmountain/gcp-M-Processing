@@ -155,6 +155,8 @@ bq mk \
     DS.Device_name,
     DS.Avg_CPU,
     DS.Avg_RAM,
+    DS._95_CPU,
+    DS._95_RAM,
     SI.CPU_Headroom,
     SI.RAM_Headroom,
     SI.processor_model,
