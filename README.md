@@ -16,6 +16,8 @@ If you have a ZIP file, upload it and then extract it…
 
 If you have individual files, upload them one at a time
 
+For a summary of the contents of each file, view https://docs.microsoft.com/en-us/movere/about-resource-consumption-data
+
 Once the files are uploaded, rename them to remove the final underscore and datestamp which comes right before the .csv. If you uploaded and extracted a ZIP file, you’ll need to “cd” into the extracted directory first. For example, if all the files end with _20210102.csv, then the command would be...
 
     rename ‘s/_20210102//’ *
