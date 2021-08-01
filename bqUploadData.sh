@@ -38,17 +38,54 @@ movereDataset.DB_Counts
 bq mk \
 --use_legacy_sql=false \
 --view \
-'SELECT VM.Device_Name, VM.Operating_System, VM.Processor_Model, VM.Core_Count, 
-VM.Total_RAM__GB_, VM.Azure_VM_vCPU AS Recommended_vCPU, VM.Azure_VM_RAM__GB_ AS Recommended_vRAM, 
-(VM.Azure_VM_vCPU - VM.Core_Count) AS CPU_Change, (VM.Azure_VM_RAM__GB_ - VM.Total_RAM__GB_) AS RAM_Change, VM.Azure_Readiness, 
-VM_Perf.Avg_CPU, VM_Perf.Max_CPU, VM_Perf.Avg_RAM, VM_Perf.Max_RAM, VM_Perf._95_CPU, VM_Perf._95_RAM, VM_Perf._99_Disk_IOPS, VM_Perf._99_Disk_Throughput__MB_sec_, VM_Perf.Avg_Received_Network__MB_day_, VM_Perf.Avg_Sent_Network__MB_day_,  
-VM.Software_Tags AS Tags, COUNT(Storage.Drive_Letter) AS Drives, DB.NumDBs AS SQL_Databases, DB.SizeDBsInMBs AS DB_Size_MB
-FROM (`movereDataset.azure_vm_sizing` AS VM LEFT OUTER JOIN `movereDataset.azure_storage_pricing` AS Storage ON VM.Device_Name = Storage.Device_Name)
-LEFT OUTER JOIN `movereDataset.DB_Counts` AS DB ON VM.Device_Name = DB.Device_Name
-LEFT OUTER JOIN `movereDataset.arc_landscape_device_summary` AS VM_Perf ON VM.Device_Name = VM_Perf.Device_Name
-GROUP BY VM.Device_Name, VM.Operating_System, VM.Processor_Model, VM.Core_Count, VM.Total_RAM__GB_, Recommended_vCPU, Recommended_vRAM, VM.Azure_Readiness, VM_Perf.Avg_CPU, VM_Perf.Max_CPU, 
-VM_Perf.Avg_RAM, VM_Perf.Max_RAM, VM_Perf._95_CPU, VM_Perf._95_RAM, VM_Perf._99_Disk_IOPS, VM_Perf._99_Disk_Throughput__MB_sec_, VM_Perf.Avg_Received_Network__MB_day_, VM_Perf.Avg_Sent_Network__MB_day_, 
-Tags, SQL_Databases, DB_Size_MB' \
+'SELECT 
+    VM.Device_Name, 
+    VM.Operating_System, 
+    VM.Processor_Model, 
+    VM.Core_Count,
+    VM.Total_RAM__GB_,
+    VM.Azure_VM_vCPU AS Recommended_vCPU,
+    VM.Azure_VM_RAM__GB_ AS Recommended_vRAM,
+    (VM.Azure_VM_vCPU - VM.Core_Count) AS CPU_Change,
+    (VM.Azure_VM_RAM__GB_ - VM.Total_RAM__GB_) AS RAM_Change,
+    VM.Azure_Readiness,
+    DS.Avg_CPU, DS.Max_CPU,
+    DS.Avg_RAM,
+    DS.Max_RAM,
+    DS._95_CPU,
+    DS._95_RAM,
+    DS._99_Disk_IOPS,
+    DS._99_Disk_Throughput__MB_sec_,
+    DS.Avg_Received_Network__MB_day_,
+    DS.Avg_Sent_Network__MB_day_, 
+    VM.Software_Tags AS Tags,
+    COUNT(Storage.Drive_Letter) AS Drives,
+    DB.NumDBs AS SQL_Databases,
+    DB.SizeDBsInMBs AS DB_Size_MB
+FROM (`movereDataset.azure_vm_sizing` AS VM 
+    LEFT OUTER JOIN `movereDataset.azure_storage_pricing` AS Storage ON VM.Device_Name = Storage.Device_Name) 
+    LEFT OUTER JOIN `movereDataset.DB_Counts` AS DB ON VM.Device_Name = DB.Device_Name 
+    LEFT OUTER JOIN `movereDataset.arc_landscape_device_summary` AS DS ON VM.Device_Name = DS.Device_Name
+GROUP BY 
+    VM.Device_Name,
+    VM.Operating_System,
+    VM.Processor_Model,
+    VM.Core_Count, VM.Total_RAM__GB_,
+    Recommended_vCPU,
+    Recommended_vRAM,
+    VM.Azure_Readiness,
+    DS.Avg_CPU,
+    DS.Max_CPU,
+    DS.Avg_RAM,
+    DS.Max_RAM,
+    DS._95_CPU,
+    DS._95_RAM,
+    DS._99_Disk_IOPS,
+    DS._99_Disk_Throughput__MB_sec_,
+    DS.Avg_Received_Network__MB_day_,
+    DS.Avg_Sent_Network__MB_day_,
+    Tags,
+    SQL_Databases, DB_Size_MB' \
 movereDataset.VM_Full_View
 
 # Azure_Provisioning
